@@ -2,8 +2,8 @@ name: build-docs
 on:
   workflow_call:
 jobs:
-  build_docs:
-    runs_on: ubuntu-latest
+  build-docs:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -12,13 +12,14 @@ jobs:
       - name: Checkout docs-builder
         uses: actions/checkout@v4
         with:
+          repository: envicutor/docs-builder
           path: docs-builder
       - name: Run `make build`
-        run: |
-          cd "$GITHUB_WORKSPACE/docs-builder"
-          make build path="$GITHUB_WORKSPACE/docs"
+        run: make build path="$GITHUB_WORKSPACE/docs"
+        working-directory: ${{ github.workspace }}/docs-builder
         shell: bash
-      - uses: actions/upload-artifact@v3
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v3
         with:
           name: html
-          path: $GITHUB_WORKSPACE/docs/_build/html
+          path: ${{ github.workspace }}/docs/_build/html

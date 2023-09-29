@@ -9,6 +9,7 @@
   - common_workflow()
   - download_artifact(html)
   - clone current@deploy -> /deploy
+  - rm -rf /deploy/*
   - mv ./html/* /deploy/
   - cd /deploy
   - commit, push

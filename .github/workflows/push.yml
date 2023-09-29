@@ -1,0 +1,32 @@
+name: build-docs
+on:
+  workflow_call:
+jobs:
+  build-docs:
+    uses: envicutor/docs-workflows/.github/workflows/common.yml
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-docs
+    steps:
+      - name: Download HTML
+        uses: actions/download-artifact@v3
+        with:
+          name: html
+          path: ${{ github.workspace }}/artifacts
+      - name: Checkout deploy
+        uses: actions/checkout@v4
+        with:
+          ref: deploy
+          path: deploy
+      - name: Deploy html
+        - run: |
+            rm -rf *
+            mv "$GITHUB_WORKSPACE/artifacts/html"/* .
+            git config --global user.name github-actions[bot]
+            git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add -A
+            git commit -m "Deploy"
+            git push
+          working-directory: ${{ github.workspace }}/deploy
+          shell: bash
+
