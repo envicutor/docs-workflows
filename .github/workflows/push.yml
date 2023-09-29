@@ -19,7 +19,7 @@ jobs:
           ref: deploy
           path: deploy
       - name: Deploy html
-        - run: |
+          run: |
             rm -rf *
             mv "$GITHUB_WORKSPACE/artifacts/html"/* .
             git config --global user.name github-actions[bot]
