@@ -1,6 +1,13 @@
 name: Build and deploy docs
 on:
   workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+    secrets:
+      pat:
+        required: true
 jobs:
   build-docs:
     uses: envicutor/docs-workflows/.github/workflows/common.yml@main
@@ -19,14 +26,12 @@ jobs:
           ref: deploy
           path: deploy
       - name: Deploy html
-        run: |
-          rm -rf *
-          mv "$GITHUB_WORKSPACE/html"/* .
-          git config --global user.name github-actions[bot]
-          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add -A
-          git commit -m "Deploy"
-          git push
-        working-directory: ${{ github.workspace }}/deploy
-        shell: bash
-
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.pat }}
+        with:
+          source-directory: ${{ github.workspace }}/html
+          destination-github-username: 'envicutor'
+          destination-repository-name: ${{ inputs.target }}
+          user-name: github-actions[bot]
+          user-email: 41898282+github-actions[bot]@users.noreply.github.com

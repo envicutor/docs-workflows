@@ -5,14 +5,10 @@
   - make build path=/app
   - upload_artifact(/app/_build/html, html)
 
-- push_workflow
+- push_workflow($target, #pat)
   - common_workflow()
-  - download_artifact(html)
-  - clone current@deploy -> /deploy
-  - rm -rf /deploy/*
-  - mv ./html/* /deploy/
-  - cd /deploy
-  - commit, push
+  - download_artifact(html) -> /html
+  - push_to_another_repo(target_repo_name: "$target", source_directory: /html, personal_access_token: #pat)
 
 - pr_workflow
   - common_workflow()
