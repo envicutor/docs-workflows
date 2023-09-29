@@ -12,7 +12,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: html
-          path: ${{ github.workspace }}/artifacts
+          path: ${{ github.workspace }}/html
       - name: Checkout deploy
         uses: actions/checkout@v4
         with:
@@ -21,7 +21,7 @@ jobs:
       - name: Deploy html
         run: |
           rm -rf *
-          mv "$GITHUB_WORKSPACE/artifacts/html"/* .
+          mv "$GITHUB_WORKSPACE/html"/* .
           git config --global user.name github-actions[bot]
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A
