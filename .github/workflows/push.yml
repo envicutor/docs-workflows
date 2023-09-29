@@ -3,7 +3,7 @@ on:
   workflow_call:
 jobs:
   build-docs:
-    uses: envicutor/docs-workflows/.github/workflows/common.yml
+    uses: envicutor/docs-workflows/.github/workflows/common.yml@master
   deploy:
     runs-on: ubuntu-latest
     needs: build-docs
