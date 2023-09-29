@@ -20,17 +20,12 @@ jobs:
         with:
           name: html
           path: ${{ github.workspace }}/html
-      - name: Checkout deploy
-        uses: actions/checkout@v4
-        with:
-          ref: deploy
-          path: deploy
       - name: Deploy html
         uses: cpina/github-action-push-to-another-repository@v1.7.2
         env:
           API_TOKEN_GITHUB: ${{ secrets.pat }}
         with:
-          source-directory: ${{ github.workspace }}/html
+          source-directory: html
           destination-github-username: 'envicutor'
           destination-repository-name: ${{ inputs.target }}
           user-name: github-actions[bot]
