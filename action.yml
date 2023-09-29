@@ -1,0 +1,26 @@
+name: build-docs
+author: Envicutor
+description: Build Envicutor docs
+branding:
+  icon: user-check
+  color: green
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        path: docs
+    - name: Checkout docs-builder
+      uses: actions/checkout@v4
+      with:
+        path: docs-builder
+    - name: Run `make build`
+      run: |
+        cd "$GITHUB_WORKSPACE/docs-builder"
+        make build path="$GITHUB_WORKSPACE/docs"
+      shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: html
+        path: $GITHUB_WORKSPACE/docs/_build/html

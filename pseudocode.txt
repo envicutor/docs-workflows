@@ -1,0 +1,17 @@
+- common_workflow
+  - clone current@master -> /app
+  - clone docs-builder -> /docs-builder
+  - cd /docs-builder
+  - make build path=/app
+  - upload_artifact(/app/_build/html, html)
+
+- push_workflow
+  - common_workflow()
+  - download_artifact(html)
+  - clone current@deploy -> /deploy
+  - mv ./html/* /deploy/
+  - cd /deploy
+  - commit, push
+
+- pr_workflow
+  - common_workflow()
