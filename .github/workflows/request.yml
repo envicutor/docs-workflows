@@ -15,7 +15,8 @@ jobs:
     uses: envicutor/docs-workflows/.github/workflows/common.yml@main
     with:
       target: ${{ inputs.target }}
-      branch-name: ${{ env.BRANCH_NAME }}
+      # We can't seem to use env here: https://github.com/actions/runner/issues/1189#issuecomment-1741672276
+      branch-name: pr-${{ github.event.pull_request.user.login }}-${{ github.event.number }}
     secrets:
       pat: ${{ secrets.pat }}
   comment-on-pr:
