@@ -9,14 +9,14 @@ on:
       pat:
         required: true
 env:
-  BRANCH_NAME: pr-${{ github.event.pull_request.user.login }}-${{ github.event.number }}
+  BRANCH_NAME: pr-${{ github.event.number }}
 jobs:
   run-common-workflow:
     uses: envicutor/docs-workflows/.github/workflows/common.yml@main
     with:
       target: ${{ inputs.target }}
       # We can't seem to use env here: https://github.com/actions/runner/issues/1189#issuecomment-1741672276
-      branch-name: pr-${{ github.event.pull_request.user.login }}-${{ github.event.number }}
+      branch-name: pr-${{ github.event.number }}
     secrets:
       pat: ${{ secrets.pat }}
   comment-on-pr:
