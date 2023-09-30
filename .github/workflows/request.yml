@@ -1,0 +1,32 @@
+name: On pull request (abstract)
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+    secrets:
+      pat:
+        required: true
+jobs:
+  env:
+    BRANCH_NAME: pr-${{ github.event.pull_request.user.login }}-${{ github.event.number }}
+  run-common-workflow:
+    uses: envicutor/docs-workflows/.github/workflows/common.yml@main
+    with:
+      target: ${{ inputs.target }}
+      branch-name: ${{ env.BRANCH_NAME }}
+    secrets:
+      pat: ${{ secrets.pat }}
+  comment-on-pr:
+    needs: run-common-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Comment on PR
+        uses: thollander/actions-comment-pull-request@v2.4.2
+        with:
+          message: |
+            A preview build has been pushed to
+            https://github.com/envicutor/${{ inputs.target }}/tree/${{ env.BRANCH_NAME }}

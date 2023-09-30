@@ -1,14 +1,20 @@
-- common_workflow
-  - clone current@master -> /app
-  - clone docs-builder -> /docs-builder
+- common_workflow($target, $branch_name, #pat)
+  - clone(current) -> /docs
+  - clone(docs-builder) -> /docs-builder
   - cd /docs-builder
-  - make build path=/app
-  - upload_artifact(/app/_build/html, html)
+  - make build path=/docs
+  - push_to_another_repo(
+      target_repo_name: $target,
+      source_directory: /docs/_build/html,
+      branch_name: $branch_name,
+      personal_access_token: #pat,
+      create_branch_if_not_exists: true
+    )
 
 - push_workflow($target, #pat)
-  - common_workflow()
-  - download_artifact(html) -> /html
-  - push_to_another_repo(target_repo_name: "$target", source_directory: /html, personal_access_token: #pat)
+  - common_workflow($target, main, #pat)
 
-- pr_workflow
-  - common_workflow()
+- pr_workflow($target, #pat)
+  - branch_name = pr-${pr.username}-${pr.id}
+  - common_workflow($target, $branch_name, #pat)
+  - comment_on_pr("A preview build has been pushed to https://github.com/envicutor/$target/tree/$branch_name")

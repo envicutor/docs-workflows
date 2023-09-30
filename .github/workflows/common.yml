@@ -1,6 +1,16 @@
-name: Build docs
+name: Common workflow
 on:
   workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+      branch-name:
+        required: true
+        type: string
+    secrets:
+      pat:
+        required: true
 jobs:
   build-docs:
     runs-on: ubuntu-latest
@@ -18,8 +28,15 @@ jobs:
         run: make build path="$GITHUB_WORKSPACE/docs"
         working-directory: ${{ github.workspace }}/docs-builder
         shell: bash
-      - name: Upload HTML artifact
-        uses: actions/upload-artifact@v3
+      - name: Push HTML to built docs repo
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.pat }}
         with:
-          name: html
-          path: ${{ github.workspace }}/docs/_build/html
+          source-directory: docs/_build/html
+          destination-github-username: 'envicutor'
+          destination-repository-name: ${{ inputs.target }}
+          target-branch: ${{ inputs.branch-name }}
+          user-name: github-actions[bot]
+          user-email: 41898282+github-actions[bot]@users.noreply.github.com
+          create-target-branch-if-needed: true
