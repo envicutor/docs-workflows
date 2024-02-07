@@ -15,15 +15,8 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          path: docs
-      - name: Checkout docs-builder
-        uses: actions/checkout@v4
-        with:
-          repository: envicutor/docs-builder
-          path: docs-builder
+      - name: Checkout repositories
+        uses: envicutor/docs-workflows/.github/actions/checkout.yml@main
       - name: Run `make build`
         run: make build path="$GITHUB_WORKSPACE/docs"
         working-directory: ${{ github.workspace }}/docs-builder

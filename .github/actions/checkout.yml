@@ -1,0 +1,13 @@
+name: Checkout repositories
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        path: docs
+    - name: Checkout docs-builder
+      uses: actions/checkout@v4
+      with:
+        repository: envicutor/docs-builder
+        path: docs-builder
