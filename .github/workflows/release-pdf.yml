@@ -24,3 +24,4 @@ jobs:
           files: docs/_build/latex/*.pdf
           token: ${{ secrets.pat }}
           repository: envicutor/${{ inputs.target }}
+          tag_name: latest
