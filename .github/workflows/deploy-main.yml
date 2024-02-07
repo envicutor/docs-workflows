@@ -1,4 +1,4 @@
-name: After pushing to main (abstract)
+name: Deploy website to main
 on:
   workflow_call:
     inputs:
@@ -9,8 +9,8 @@ on:
       pat:
         required: true
 jobs:
-  run-common-workflow:
-    uses: envicutor/docs-workflows/.github/workflows/common.yml@main
+  run-deploy-to-branch:
+    uses: envicutor/docs-workflows/.github/workflows/deploy-branch.yml@main
     with:
       target: ${{ inputs.target }}
       branch-name: main

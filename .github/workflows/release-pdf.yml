@@ -1,0 +1,26 @@
+name: Release PDF (abstract)
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+    secrets:
+      pat:
+        required: true
+jobs:
+  release-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repositories
+        uses: envicutor/docs-workflows/.github/actions/checkout@main
+      - name: Run `make pdf`
+        run: make pdf path="$GITHUB_WORKSPACE/docs"
+        working-directory: ${{ github.workspace }}/docs-builder
+        shell: bash
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: docs/_build/latex/*.pdf
+          token: ${{ secrets.pat }}
+          repository: envicutor/${{ inputs.target }}

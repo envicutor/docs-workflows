@@ -11,8 +11,8 @@ on:
 env:
   BRANCH_NAME: pr-${{ github.event.number }}
 jobs:
-  run-common-workflow:
-    uses: envicutor/docs-workflows/.github/workflows/common.yml@main
+  run-deploy-to-branch-workflow:
+    uses: envicutor/docs-workflows/.github/workflows/deploy-branch.yml@main
     with:
       target: ${{ inputs.target }}
       # We can't seem to use env here: https://github.com/actions/runner/issues/1189#issuecomment-1741672276
@@ -20,7 +20,7 @@ jobs:
     secrets:
       pat: ${{ secrets.pat }}
   comment-on-pr:
-    needs: run-common-workflow
+    needs: run-deploy-to-branch-workflow
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
